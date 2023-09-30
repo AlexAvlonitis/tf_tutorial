@@ -34,4 +34,13 @@ resource "aws_instance" "alex_main" {
     tags = {
         Name = "Alex-ec2-${random_id.alex_node_id[count.index].dec}"
     }
+    
+    provisioner "local-exec" {
+        command = "printf '\n${self.public_ip}' >> aws_hosts"
+    }
+    
+    provisioner "local-exec" {
+        when = destroy
+        command = "sed -i '/^[0-9]/d' aws_hosts"
+    }
 }
