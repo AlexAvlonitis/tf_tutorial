@@ -26,7 +26,7 @@ resource "aws_instance" "alex_main" {
     key_name = aws_key_pair.alex_auth.key_name
     vpc_security_group_ids = [aws_security_group.alex_public_sg.id]
     subnet_id = aws_subnet.alex_public_subnet[count.index].id
-    
+    user_data = templatefile("./main-user-data.tpl", { new_hostname = "Alex-ec2-${random_id.alex_node_id[count.index].dec}" })
     root_block_device {
         volume_size = var.main_vol_size
     }
